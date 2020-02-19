@@ -98,8 +98,8 @@ public class QueryController {
     @ApiOperation(value = "分页查询任务列表（所有）", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "instanceId", value = "流程实例ID", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页码", required = false, defaultValue = "1", dataType = "int"),
-            @ApiImplicitParam(name = "step", value = "数量", required = false, defaultValue = "20", dataType = "int"),
+            @ApiImplicitParam(name = "page", value = "页码", required = false, defaultValue = "1", dataType = "Integer"),
+            @ApiImplicitParam(name = "step", value = "数量", required = false, defaultValue = "20", dataType = "Integer"),
     })
     public Object pageListByInstanceId(String instanceId, Integer page, Integer step) {
         List<HistoricTaskInstance> list = histTaskQueryHandler.pageListByInstanceId(instanceId, page, step);
@@ -112,8 +112,8 @@ public class QueryController {
     @ApiOperation(value = "查询未签收任务列表", produces = "application/json")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "String"),
-            @ApiImplicitParam(name = "page", value = "页码", required = false, defaultValue = "1", dataType = "int"),
-            @ApiImplicitParam(name = "step", value = "数量", required = false, defaultValue = "20", dataType = "int")})
+            @ApiImplicitParam(name = "page", value = "页码", required = false, defaultValue = "1", dataType = "Integer"),
+            @ApiImplicitParam(name = "step", value = "数量", required = false, defaultValue = "20", dataType = "Integer")})
     public Object unclaim(String userId, Integer page, Integer step) {
         List<Task> taskList = taskQueryHandler.taskCandidateUser(userId, page, step);
         List list = BeanUtils.copyList(taskList, TaskVO.class);

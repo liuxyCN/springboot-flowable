@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.flowable.engine.impl.dynamic.DynamicUserTaskBuilder;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.slf4j.Logger;
@@ -137,6 +138,20 @@ public class InstanceController {
     public ResponseData deleteMultiInstanceExecution(String currentChildExecutionId, boolean flag) {
         instanceHandler.deleteMultiInstanceExecution(currentChildExecutionId, flag);
         return ResponseData.success("减签成功");
+    }
+
+    @RequestMapping(value = "/addTask", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "加签", notes = "", produces = "application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "processInstanceId", value = "流程实例ID", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "task", value = "{name:'',assignee:'',postion:''}", required = true, dataType = "String"),
+    })
+    public ResponseData addTask(String processInstanceId, @RequestBody Map<String, String> task) {
+        DynamicUserTaskBuilder taskBuilder = new DynamicUserTaskBuilder();
+        taskBuilder.name(task.get("name")).assignee(task.get("assignee"));
+        instanceHandler.addTask(processInstanceId, taskBuilder, task.get("position"));
+        return ResponseData.success("加签成功");
     }
 }
 

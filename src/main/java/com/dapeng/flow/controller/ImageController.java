@@ -48,7 +48,7 @@ public class ImageController {
     public void viewProcessImg(String processId, HttpServletResponse response) throws IOException {
         OutputStream os = null;
         try {
-            String directory = "F:" + File.separator + "temp" + File.separator;
+            String directory = "/tmp/flowable/";
             final String suffix = ".png";
             File folder = new File(directory);
             File[] files = folder.listFiles();

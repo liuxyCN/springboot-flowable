@@ -4,10 +4,12 @@ package com.dapeng.flow.flowable.handler;
 import com.dapeng.flow.common.utils.BeanUtils;
 import com.dapeng.flow.flowable.ActInstance;
 import com.dapeng.flow.flowable.ServiceFactory;
+import com.dapeng.flow.flowable.engine.impl.cmd.InjectUserTaskInProcessInstanceCmd;
 import com.dapeng.flow.repository.model.TaskVO;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.engine.impl.cmd.AddMultiInstanceExecutionCmd;
 import org.flowable.engine.impl.cmd.DeleteMultiInstanceExecutionCmd;
+import org.flowable.engine.impl.dynamic.DynamicUserTaskBuilder;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
 import org.slf4j.Logger;
@@ -149,6 +151,10 @@ public class InstanceHandler extends ServiceFactory implements ActInstance {
     @Override
     public void deleteMultiInstanceExecution(String currentChildExecutionId, boolean flag) {
         managementService.executeCommand(new DeleteMultiInstanceExecutionCmd(currentChildExecutionId, flag));
+    }
+
+    public void addTask(String processInstanceId, DynamicUserTaskBuilder dynamicUserTaskBuilder, String injectPosition) {
+        managementService.executeCommand(new InjectUserTaskInProcessInstanceCmd(processInstanceId, dynamicUserTaskBuilder, injectPosition));
     }
 
 }

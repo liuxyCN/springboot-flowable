@@ -1,6 +1,10 @@
 package com.dapeng.flow.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.flowable.rest.service.api.RestResponseFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -19,15 +23,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableSwagger2
+@ComponentScan(basePackages = "com.dapeng.flow.controller")
+@ComponentScan(basePackages = "org.flowable.rest.service.api")
 public class Swagger2Config {
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
+    @Bean()
+    public RestResponseFactory restResponseFactory() {
+        RestResponseFactory restResponseFactory = new RestResponseFactory(objectMapper);
+        return restResponseFactory;
+    }
 
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                // 自行修改为自己的包路径
-                .apis(RequestHandlerSelectors.basePackage("com.dapeng.flow.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -35,12 +48,13 @@ public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("工作流微服务API文档")
-//                .description("大鹏教育工作流微服务项目")
+//                .description("工作流微服务项目")
                 //服务条款网址
-//                .termsOfServiceUrl("https://blog.csdn.net/ysk_xh_521")
+//                .termsOfServiceUrl("https://")
 //                .version("1.0")
-//                .contact(new Contact("liuxz", "http://liuxz.cn", "1510822551@qq.com"))
+//                .contact(new Contact("liu", "http://", "mail@qq.com"))
                 .build();
     }
+
 }
 

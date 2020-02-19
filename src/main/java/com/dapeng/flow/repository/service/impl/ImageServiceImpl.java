@@ -5,7 +5,9 @@ import com.dapeng.flow.repository.service.ImageService;
 import com.dapeng.flow.repository.service.impl.image.CustomProcessDiagramGenerator;
 import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.FlowElement;
 import org.flowable.bpmn.model.FlowNode;
+import org.flowable.bpmn.model.Process;
 import org.flowable.bpmn.model.SequenceFlow;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.RepositoryService;
@@ -27,6 +29,7 @@ import java.util.Map;
 
 /**
  * 流程追踪图生成类
+ *
  * @author liuxz
  */
 @Service
@@ -98,12 +101,16 @@ public class ImageServiceImpl implements ImageService {
 
         for (HistoricActivityInstance historicActivityInstance : historicActivityInstanceList) {
             // 获取流程节点
-            FlowNode flowNode = (FlowNode) bpmnModel.getMainProcess().getFlowElement(historicActivityInstance
+            Process p = bpmnModel.getMainProcess();
+            FlowElement fe = p.getFlowElement(historicActivityInstance
                     .getActivityId(), true);
-            allHistoricActivityNodeList.add(flowNode);
-            // 结束时间不为空，当前节点则已经完成
-            if (historicActivityInstance.getEndTime() != null) {
-                finishedActivityInstanceList.add(historicActivityInstance);
+            if (fe instanceof FlowNode) {
+                FlowNode flowNode = (FlowNode) fe;
+                allHistoricActivityNodeList.add(flowNode);
+                // 结束时间不为空，当前节点则已经完成
+                if (historicActivityInstance.getEndTime() != null) {
+                    finishedActivityInstanceList.add(historicActivityInstance);
+                }
             }
         }
 
